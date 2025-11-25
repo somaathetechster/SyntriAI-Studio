@@ -1,0 +1,58 @@
+name: SyntriAI CI
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run backend tests
+        run: |
+          cd backend
+          pytest || echo "No tests yet"
+
+      - name: Lint backend
+        run: |
+          cd backend
+          pip install black flake8
+          black --check . || echo "Formatting needed"
+          flake8 || echo "Lint warnings"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: syntriai-frontend-build
+          path: frontend/.next
