@@ -1,0 +1,6 @@
+node_modules/
+frontend/.next/
+backend/venv/
+orchestrator/venv/
+.env
+.DS_Store
