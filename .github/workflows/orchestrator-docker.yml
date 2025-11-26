@@ -1,0 +1,32 @@
+name: Orchestrator Docker Deploy
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "orchestrator/**"
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build + Push Orchestrator Image
+        working-directory: orchestrator
+        run: |
+          IMAGE=ghcr.io/${{ github.repository_owner }}/syntri-orchestrator:latest
+          docker build -t $IMAGE .
+          docker push $IMAGE

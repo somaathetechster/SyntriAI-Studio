@@ -6,10 +6,28 @@ import axios from "axios";
 const BACKEND =
   process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
 
-export default function AISearchPanel({ files, onClose, onSelectFile }) {
+// Result type returned from backend
+interface SearchResult {
+  file: string;
+  reason: string;
+  snippet: string;
+}
+
+// Props for component
+interface AISearchPanelProps {
+  files: string[]; // Or more specific if needed
+  onClose: () => void;
+  onSelectFile: (file: string) => void;
+}
+
+export default function AISearchPanel({
+  files,
+  onClose,
+  onSelectFile,
+}: AISearchPanelProps) {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
 
   async function runSearch() {
     if (!query.trim()) return;
@@ -22,7 +40,7 @@ export default function AISearchPanel({ files, onClose, onSelectFile }) {
       files,
     });
 
-    setResults(res.data.results);
+    setResults(res.data.results as SearchResult[]);
     setLoading(false);
   }
 

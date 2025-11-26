@@ -1,6 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# Node
 node_modules/
-frontend/.next/
-backend/venv/
-orchestrator/venv/
-.env
+.next/
+dist/
+build/
+
+# OS system files
 .DS_Store
+
+# Env
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log
+yarn-debug.log
+
+# Workspace
+workspace/
+generated/

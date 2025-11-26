@@ -1,58 +1,101 @@
 name: SyntriAI CI
+
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
-  build-test:
+
+  # -------------------------
+  # FRONTEND CI
+  # -------------------------
+  frontend:
+    name: Frontend Build + Lint
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          python-version: '3.12'
+          node-version: 18
 
-      - name: Install backend dependencies
+      - name: Install Dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Lint
+        working-directory: frontend
+        run: npm run lint || true
+
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+
+
+  # -------------------------
+  # BACKEND CI
+  # -------------------------
+  backend:
+    name: Backend Test + Build
+    runs-on: ubuntu-latest
+    needs: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Install dependencies
+        working-directory: backend
         run: |
-          cd backend
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Backend lint (flake8)
+        working-directory: backend
+        run: |
+          pip install flake8
+          flake8 . || true
+
       - name: Run backend tests
+        working-directory: backend
         run: |
-          cd backend
-          pytest || echo "No tests yet"
+          pytest || true
 
-      - name: Lint backend
-        run: |
-          cd backend
-          pip install black flake8
-          black --check . || echo "Formatting needed"
-          flake8 || echo "Lint warnings"
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+  # -------------------------
+  # ORCHESTRATOR CI
+  # -------------------------
+  orchestrator:
+    name: Orchestrator Lint + Docker Build
+    runs-on: ubuntu-latest
+    needs: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          node-version: 20
+          python-version: 3.12
 
-      - name: Install frontend dependencies
+      - name: Install dependencies
+        working-directory: orchestrator
         run: |
-          cd frontend
-          npm install
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Build frontend
+      - name: Lint orchestrator
+        working-directory: orchestrator
         run: |
-          cd frontend
-          npm run build
+          pip install flake8
+          flake8 . || true
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: syntriai-frontend-build
-          path: frontend/.next
+      - name: Build Docker image
+        working-directory: orchestrator
+        run: |
+          docker build -t syntri-orchestrator .
