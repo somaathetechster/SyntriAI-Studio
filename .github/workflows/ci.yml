@@ -32,6 +32,8 @@ jobs:
 
       - name: Build
         working-directory: frontend
+        env:
+          NEXT_PUBLIC_BACKEND_URL: "http://13.60.247.231"
         run: npm run build
 
 
