@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSupabaseProjects } from "@/hooks/useSupabaseProjects";
+import { useSupabaseProjects } from "../hooks/useSupabaseProjects";
 
 type HistoryPanelProps = {
   onClose: () => void;

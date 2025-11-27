@@ -8,8 +8,8 @@ import {
   TasksResult,
   ApiResult,
   FilesResult,
-} from "@/lib/types";
-import { useSupabaseProjects } from "@/hooks/useSupabaseProjects";
+} from "../lib/types";
+import { useSupabaseProjects } from "./useSupabaseProjects";
 
 const BACKEND =
   process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";

@@ -1,6 +1,6 @@
 "use client";
 
-import { ActiveTab } from "@/lib/types";
+import { ActiveTab } from "../lib/types";
 
 type MobileNavProps = {
   activeTab: ActiveTab;

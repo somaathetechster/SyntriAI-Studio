@@ -1,17 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import StudioLayout from "@/components/StudioLayout";
-import StudioBackground from "@/components/StudioBackground";
-import TopNav from "@/components/TopNav";
-import LeftPanel from "@/components/LeftPanel";
-import RightDashboard from "@/components/RightDashboard";
-import HologramAssistant from "@/components/HologramAssistant";
-import MobileNav from "@/components/MobileNav";
-import RunConsole from "@/components/RunConsole";
-import { ActiveTab } from "@/lib/types";
-import { useSyntriAIPipeline } from "@/hooks/useSyntriAIPipeline";
-import { useLocalPersistence } from "@/hooks/useLocalPersistence";
+import StudioLayout from "../components/StudioLayout";
+import StudioBackground from "../components/StudioBackground";
+import TopNav from "../components/TopNav";
+import LeftPanel from "../components/LeftPanel";
+import RightDashboard from "../components/RightDashboard";
+import HologramAssistant from "../components/HologramAssistant";
+import MobileNav from "../components/MobileNav";
+import RunConsole from "../components/RunConsole";
+import { ActiveTab } from "../lib/types";
+import { useSyntriAIPipeline } from "../hooks/useSyntriAIPipeline";
+import { useLocalPersistence } from "../hooks/useLocalPersistence";
 
 export default function Home() {
   const {

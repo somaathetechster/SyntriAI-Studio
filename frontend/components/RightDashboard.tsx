@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ActiveTab } from "@/lib/types";
+import { ActiveTab } from "../lib/types";
 import ArchitectureView from "./tabs/ArchitectureView";
 import TasksView from "./tabs/TasksView";
 import APIView from "./tabs/APIView";
